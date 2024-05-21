@@ -21,7 +21,7 @@ import java.util.Optional;
 
 public class TaskApp extends Application {
 
-    private final ObservableList<Task> taskList = FXCollections.observableArrayList();
+    private static final ObservableList<Task> taskList = FXCollections.observableArrayList();
     private final ListView<Task> listView = new ListView<>();
 
     public static void main(String[] args) {
@@ -55,7 +55,7 @@ public class TaskApp extends Application {
                     Label titleLabel = new Label(item.getTitle());
                     titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14pt;");
 
-                    Label dateLabel = new Label(item.getDate().toString());
+                    Label dateLabel = new Label(item.getDate() != null ? item.getDate().toString() : "No date"); // Check if date is null
                     dateLabel.setStyle("-fx-font-size: 14pt;");
 
                     Label descriptionLabel = new Label(item.getDescription());
@@ -68,7 +68,7 @@ public class TaskApp extends Application {
                         titleLabel.setStyle("-fx-text-fill: grey;");
                         dateLabel.setStyle("-fx-text-fill: grey;");
                         descriptionLabel.setStyle("-fx-text-fill: grey;");
-                    } else if (item.getDate().isBefore(LocalDate.now())) {
+                    } else if (item.getDate() != null && item.getDate().isBefore(LocalDate.now())) { // Check if date is null
                         titleLabel.setStyle("-fx-text-fill: red;");
                         dateLabel.setStyle("-fx-text-fill: red;");
                         descriptionLabel.setStyle("-fx-text-fill: red;");
@@ -95,8 +95,6 @@ public class TaskApp extends Application {
                     setGraphic(hbox);
                 }
             }
-
-
         });
 
         Button addButton = new Button("+");
@@ -194,11 +192,11 @@ public class TaskApp extends Application {
     }
 
 
-    private void showAlert(String message) {
+    private void showAlert() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(null);
-        alert.setContentText(message);
+        alert.setContentText("Please select a date that is not behind the current date");
         alert.showAndWait();
     }
 
@@ -221,12 +219,11 @@ public class TaskApp extends Application {
 
     private void addTask(String title, String description, LocalDate date) {
         if (title.trim().isEmpty()) {
-            showAlert("Title cannot be empty");
-            return;
+            title = "Task " + (taskList.size() + 1); // Set default title if title is empty
         }
 
-        if (date.isBefore(LocalDate.now())) {
-            showAlert("Please select a date that is not behind the current date");
+        if (date != null && date.isBefore(LocalDate.now())) {
+            showAlert();
             return;
         }
 
@@ -236,12 +233,11 @@ public class TaskApp extends Application {
 
     private void editTask(Task task, String title, String description, LocalDate date) {
         if (title.trim().isEmpty()) {
-            showAlert("Title cannot be empty");
-            return;
+            title = "Task " + (taskList.size() + 1); // Set default title if title is empty
         }
 
-        if (date.isBefore(LocalDate.now())) {
-            showAlert("Please select a date that is not behind the current date");
+        if (date != null && date.isBefore(LocalDate.now())) {
+            showAlert();
             return;
         }
 
@@ -252,16 +248,16 @@ public class TaskApp extends Application {
         listView.refresh();
     }
 
-    private static class Task {
+    public static class Task {
         private String title;
         private String description;
-        private LocalDate date;
+        private LocalDate date; // This can now be null
         private boolean completed;
 
         public Task(String title, String description, LocalDate date, boolean completed) {
-            this.title = title;
+            this.title = title.isEmpty() ? "Task " + (taskList.size() + 1) : title; // Set default title if title is empty
             this.description = description;
-            this.date = date;
+            this.date = date; // This can now be null
             this.completed = completed;
         }
 
