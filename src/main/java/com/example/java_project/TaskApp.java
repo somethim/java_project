@@ -32,19 +32,7 @@ public class TaskApp extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("To-Do List App");
 
-        TextField searchField = new TextField();
-        Button searchButton = new Button("Search");
-        searchButton.setOnAction(e -> {
-            String tag = searchField.getText();
-            if (tag == null || tag.trim().isEmpty()) {
-                listView.setItems(taskList);
-            } else {
-                ArrayList<Task> filteredTasks = filterByTag(tag);
-                listView.setItems(FXCollections.observableArrayList(filteredTasks));
-            }
-        });
-
-        HBox searchBox = new HBox(10, searchField, searchButton);
+        HBox searchBox = getSearchBox();
 
         listView.setItems(taskList);
         listView.setCellFactory(param -> new ListCell<>() {
@@ -128,6 +116,22 @@ public class TaskApp extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    private HBox getSearchBox() {
+        TextField searchField = new TextField();
+        Button searchButton = new Button("Search");
+        searchButton.setOnAction(e -> {
+            String tag = searchField.getText();
+            if (tag == null || tag.trim().isEmpty()) {
+                listView.setItems(taskList);
+            } else {
+                ArrayList<Task> filteredTasks = filterByTag(tag);
+                listView.setItems(FXCollections.observableArrayList(filteredTasks));
+            }
+        });
+
+        return new HBox(10, searchField, searchButton);
     }
 
     private void openAddTaskWindow() {
