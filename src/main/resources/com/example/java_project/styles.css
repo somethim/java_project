@@ -1,8 +1,10 @@
+/* root style, overwrites defaults and is inherited by all child components */
 .root {
     -fx-background-color: #2C2F33;
     -fx-text-fill: #ffffff;
 }
 
+/* style all buttons */
 .button {
     -fx-background-color: #7289DA;
     -fx-text-fill: #ffffff;
@@ -10,26 +12,31 @@
     -fx-padding: 10px 15px;
 }
 
+/* style all buttons on hover */
 .button:hover {
     -fx-background-color: #5865F2;
 }
 
+/* style all lists */
 .list-view {
     -fx-background-color: #2C2F33;
     -fx-padding: 10px;
 }
 
+/* style all cells of a list */
 .list-cell {
     -fx-padding: 10px;
     -fx-background-color: #2C2F33;
     -fx-border-width: 0 0 1 0;
 }
 
+/* style the labels */
 .label {
     -fx-font-size: 14pt;
     -fx-text-fill: #ffffff;
 }
 
+/* style the add button component */
 .add-button {
     -fx-background-color: #7289DA;
     -fx-text-fill: #ffffff;
@@ -41,6 +48,7 @@
     -fx-border-color: transparent;
 }
 
+/* style the vertical box */
 .vbox {
     -fx-spacing: 10px;
     -fx-alignment: bottom-right;
